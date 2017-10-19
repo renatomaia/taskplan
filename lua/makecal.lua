@@ -11,27 +11,37 @@ local function calcfinish(calendar, start, required)
 	return finish
 end
 
-cfg = {
+local Configs = {
 	ShowGantGraph = false,
-	ShowDiacritics = false,
+	WorkBeginTime = 8, -- at 8:00
+	WorkFirstHours = 4, -- hours
+	WorkBreakHours = 2, -- hours
 }
-cfg.WorkHoursDaily = 8
-cfg.WorkDaysWeekly = 5
-cfg.WorkDaysMonthly = 4*cfg.WorkDaysWeekly
-cfg.WorkBeginTime = 8 -- at 8:00
-cfg.WorkFirstHours = cfg.WorkHoursDaily/2
-cfg.WorkBreakHours = 2 -- hours
+local LoadEnv = {
+	Date = Date,
+	WorkHoursDaily = 8,
+	WorkDaysWeekly = 5,
+	WorkDaysMonthly = 22,
+}
 
+local DaysCalculator = {
+	days = function (v) return v end,
+	hours = function (v) return v/LoadEnv.WorkHoursDaily end,
+	weeks = function (v) return v*LoadEnv.WorkDaysWeekly end,
+	months = function (v) return v*LoadEnv.WorkDaysMonthly end,
+}
 local function calcdays(task)
-	return task.days
-	    or(task.hours and task.hours/cfg.WorkHoursDaily)
-	    or(task.weeks and task.weeks*cfg.WorkDaysWeekly)
-	    or(task.months and task.months*cfg.WorkDaysMonthly)
-	    or task.effort
+	local days
+	for field, calculate in pairs(DaysCalculator) do
+		local value = task[field]
+		if value ~= nil then
+			days = (days or 0)+calculate(value)
+		end
+	end
+	return days
 end
 
 local Workers = {}
-local LoadEnv = { Date = Date }
 function LoadEnv.Worker(worker)
 	Workers[#Workers+1] = worker
 	local calendar = Calendar()
@@ -44,6 +54,11 @@ function LoadEnv.Worker(worker)
 	end
 	worker.calendar = calendar
 	worker.freedays = freedays
+	if worker.workrate == nil then
+		worker.workrate = 1
+	else
+		assert(worker.workrate > 0, "illegal work rate")
+	end
 	return worker
 end
 local TaskCount = 0
@@ -82,13 +97,13 @@ end
 local input = assert(loadfile((...), nil, LoadEnv))
 input(select(2, ...))
 
-for name, default in pairs(cfg) do
+for name, default in pairs(Configs) do
 	local value = LoadEnv[name]
 	if type(value) == type(default) then
-		cfg[name] = value
+		Configs[name] = value
 	end
 end
-assert(cfg.WorkFirstHours <= cfg.WorkHoursDaily, "first work period is too long")
+assert(Configs.WorkFirstHours <= LoadEnv.WorkHoursDaily, "first work period is too long")
 
 local LetterEquivalence = {
 	a = {"á","à","â","ã"},
@@ -119,11 +134,11 @@ local function div(number, divisor)
 	return math.floor(number/divisor), number%divisor
 end
 
-local WorkBreakTime = cfg.WorkBeginTime
-                    + cfg.WorkFirstHours
-local WorkEndTime = cfg.WorkBeginTime
-                  + cfg.WorkHoursDaily
-                  + cfg.WorkBreakHours
+local WorkBreakTime = Configs.WorkBeginTime
+                    + Configs.WorkFirstHours
+local WorkEndTime = Configs.WorkBeginTime
+                  + LoadEnv.WorkHoursDaily
+                  + Configs.WorkBreakHours
 local function showtime(date, finish)
 	local h = date.days%1
 	local m = 0
@@ -131,11 +146,11 @@ local function showtime(date, finish)
 		h = WorkEndTime
 		date = date-1 -- show as the end of previous day
 	else
-		h, m = div(cfg.WorkHoursDaily*h, 1)
-		h = h+cfg.WorkBeginTime
+		h, m = div(LoadEnv.WorkHoursDaily*h, 1)
+		h = h+Configs.WorkBeginTime
 		m = div(60*m, 1)
 		if h > WorkBreakTime or (h == WorkBreakTime and (m > 0 or not finish)) then
-			h = h+cfg.WorkBreakHours
+			h = h+Configs.WorkBreakHours
 		end
 	end
 	return string.format("%s-%02d:%02d", tostring(date), h,m)
@@ -168,7 +183,7 @@ end
 
 for _, worker in ipairs(Workers) do
 	print(string.rep("_", ScreenWidth))
-	print(string.format("%s (%.1f dias por semana)", worker.name, worker.workrate*cfg.WorkDaysWeekly))
+	print(string.format("%s (%.1f dias por semana)", worker.name, worker.workrate*LoadEnv.WorkDaysWeekly))
 	print("   JIRA   Tarefa                                      "
 	    .."     Inicio      -     Termino       Requ Work Free Days\n")
 	local calendar = worker.calendar
@@ -189,7 +204,7 @@ for _, worker in ipairs(Workers) do
 		                          calendar:workdays(start, finish),
 		                          calendar:freedays(start, finish),
 		                          duration))
-		if cfg.ShowGantGraph then
+		if Configs.ShowGantGraph then
 			io.write(string.rep(" ", math.ceil((start-begining)*widthfactor)),
 			         string.rep("=", math.ceil(duration*widthfactor)),
 			         milestone and "|" or "")
