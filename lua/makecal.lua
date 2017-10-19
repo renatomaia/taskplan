@@ -118,19 +118,25 @@ local function showtime(date)
 	return string.format("%s-%02d:%02d", tostring(date), h,m)
 end
 
-local function timerange(start, finish)
+local function timerange(start, finish, milestone)
 	if finish.days%1 == 0 then
 		finish = tostring(finish-1).."-18:00"
 	else
 		finish = showtime(finish)
 	end
-	return showtime(start).." - "..finish
+
+	if milestone then 
+	  finish = "["..finish.."]" 
+	else
+	  finish = " "..finish.." " 
+	end
+	return showtime(start).." -"..finish
 end
 
 local WeekDayName = {"seg", "ter", "qua", "qui", "sex", "sab", "dom"}
 
 local ScreenWidth = 100
-local RowFormat = "  %-50.50s  %s  %3.0f  %3.0f  %3.0f  %3.0f   "
+local RowFormat = "%s %-50.50s  %s %3.0f  %3.0f  %3.0f  %3.0f   "
 
 local begining = math.huge
 local widthfactor
@@ -158,12 +164,13 @@ for _, worker in ipairs(Workers) do
 		finish = task.finish
 		days  = days + task.days
 		local duration = finish-start
-		io.write(RowFormat:format(string.format("%-7s %s", task.ID, task.name:normal()),
-		                       timerange(start, finish),
-		                       task.days,
-		                       calendar:workdays(start, finish),
-		                       calendar:freedays(start, finish),
-		                       duration))
+		io.write(RowFormat:format((task.milestone and "*" or " "),
+		                          string.format("%-7s %s", task.ID, task.name:normal()),
+		                          timerange(start, finish, task.milestone),
+		                          task.days,
+		                          calendar:workdays(start, finish),
+		                          calendar:freedays(start, finish),
+		                          duration))
 		io.write(string.rep(" ", math.ceil((start-begining)*widthfactor)),
 		         string.rep("=", math.ceil(duration*widthfactor)))
 		print()
@@ -176,7 +183,8 @@ for _, worker in ipairs(Workers) do
 		end
 	end
 	print()
-	print(RowFormat:format("TOTAIS",
+	print(RowFormat:format(" ", 
+	                       "TOTAIS",
 	                       timerange(start, finish),
 	                       days,
 	                       calendar:workdays(start, finish),
