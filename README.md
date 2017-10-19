@@ -41,17 +41,17 @@ All definitions below are equivalent.
 
 - Defining the number of work days required.
 
-{{{
+```lua
 local task1 = Task{
 	name = "The Task Description",
 	worker = worker1,
 	days = 33.5, -- 33 and a half of work days required
 }
-}}}
+```
 
 - Defining months, weeks, days or hours of work required.
 
-{{{
+```lua
 local task1 = Task{
 	name = "The Task Description",
 	worker = worker1,
@@ -60,20 +60,20 @@ local task1 = Task{
 	weeks = 2, -- 10 work days since 'WorkDaysWeekly' is 5 by default.
 	months = 1, -- 20 work days since 'WorkDaysMonthly' is 20 by default.
 }
-}}}
+```
 
 - Defining sub-tasks.
 
-{{{
+```lua
 local task1 = Task{
 	name = "The Task Description",
 	worker = worker1,
-	{ name = "SubTask4", hours = 4 },
-	{ name = "SubTask3", days = 3 },
-	{ name = "SubTask2", weeks = 2 },
-	{ name = "SubTask1", months = 1 },
+	{ name = "SubTask1", hours = 4 },
+	{ name = "SubTask2", days = 3 },
+	{ name = "SubTask3", weeks = 2 },
+	{ name = "SubTask4", months = 1 },
 }
-}}}
+```
 
 ### Custom Confgurations
 
@@ -91,13 +91,13 @@ To a checkout of the project and execute one of the following commands in direct
 
 - Basic usage.
 
-{{{
+```
 $ lua makecal.lua [file]
-}}}
+```
 
 - Use Tecgraf official holydays.
 
-{{{
+```
 $ lua makecal.lua -l tecgraf [file]
-}}}
+```
 
