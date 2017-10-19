@@ -105,38 +105,41 @@ local function div(number, divisor)
 	return math.floor(number/divisor), number%divisor
 end
 
-local function showtime(date)
-	local h,m
-	h = date.days%1
-	h, m = div(WorkHoursDaily*h, 1)
-	m = div(60*m, 1)
-	if h < 4 then
-		h = h+8
+local LunchBreakTime = 2 -- hours
+local FirstShiftTime = WorkHoursDaily/2
+local WorkBeginTime = 8 -- at 8:00
+local WorkBreakTime = WorkBeginTime+FirstShiftTime
+local WorkEndTime = WorkBeginTime+WorkHoursDaily+LunchBreakTime
+local function showtime(date, finish)
+	local h = date.days%1
+	local m = 0
+	if h == 0 and finish then
+		h = WorkEndTime
+		date = date-1 -- show as the end of previous day
 	else
-		h = h+10
+		h, m = div(WorkHoursDaily*h, 1)
+		h = h+WorkBeginTime
+		m = div(60*m, 1)
+		if h > WorkBreakTime or (h == WorkBreakTime and (m > 0 or not finish)) then
+			h = h+LunchBreakTime
+		end
 	end
 	return string.format("%s-%02d:%02d", tostring(date), h,m)
 end
 
+local FinishFmt = {
+	default = "%s - %s ",
+	milestone = "%s -[%s]",
+}
 local function timerange(start, finish, milestone)
-	if finish.days%1 == 0 then
-		finish = tostring(finish-1).."-18:00"
-	else
-		finish = showtime(finish)
-	end
-
-	if milestone then 
-	  finish = "["..finish.."]" 
-	else
-	  finish = " "..finish.." " 
-	end
-	return showtime(start).." -"..finish
+	local format = FinishFmt[milestone or "default"]
+	return format:format(showtime(start), showtime(finish, "finish"))
 end
 
 local WeekDayName = {"seg", "ter", "qua", "qui", "sex", "sab", "dom"}
 
-local ScreenWidth = 100
-local RowFormat = "%s %-50.50s  %s %3.0f  %3.0f  %3.0f  %3.0f   "
+local ScreenWidth = 110
+local RowFormat = "%s %-50.50s  %s %4.0f %4.0f %4.0f %4.0f   "
 
 local begining = math.huge
 local widthfactor
@@ -152,8 +155,8 @@ end
 for _, worker in ipairs(Workers) do
 	print(string.rep("_", ScreenWidth))
 	print(string.format("%s (%.1f dias por semana)", worker.name, worker.workrate*WorkDaysWeekly))
-	print("   JIRA   Tarefa                                        "
-	      .."Inicio   -  Termino    Requ Work Free Days\n")
+	print("   JIRA   Tarefa                                      "
+	    .."     Inicio      -     Termino       Requ Work Free Days\n")
 	local calendar = worker.calendar
 	local days = 0
 	local start = worker[1].start
@@ -164,15 +167,17 @@ for _, worker in ipairs(Workers) do
 		finish = task.finish
 		days  = days + task.days
 		local duration = finish-start
-		io.write(RowFormat:format((task.milestone and "*" or " "),
+		local milestone = task.milestone and "milestone"
+		io.write(RowFormat:format(milestone and "*" or " ",
 		                          string.format("%-7s %s", task.ID, task.name:normal()),
-		                          timerange(start, finish, task.milestone),
+		                          timerange(start, finish, milestone),
 		                          task.days,
 		                          calendar:workdays(start, finish),
 		                          calendar:freedays(start, finish),
 		                          duration))
 		io.write(string.rep(" ", math.ceil((start-begining)*widthfactor)),
-		         string.rep("=", math.ceil(duration*widthfactor)))
+		         string.rep("=", math.ceil(duration*widthfactor)),
+		         milestone and "|" or "")
 		print()
 	end
 	local holidays = {}
