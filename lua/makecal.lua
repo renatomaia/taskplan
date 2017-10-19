@@ -127,7 +127,7 @@ local function timerange(start, finish)
 	return showtime(start).." - "..finish
 end
 
-local WeekDayName = {"seq", "ter", "qua", "qui", "sex", "sab", "dom"}
+local WeekDayName = {"seg", "ter", "qua", "qui", "sex", "sab", "dom"}
 
 local ScreenWidth = 100
 local RowFormat = "  %-50.50s  %s  %3.0f  %3.0f  %3.0f  %3.0f   "
