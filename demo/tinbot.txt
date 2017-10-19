@@ -1,0 +1,74 @@
+______________________________________________________________________________________________________________
+Senior (3.0 dias por semana)
+   JIRA   Tarefa                                           Inicio      -     Termino       Requ Work Free Days
+
+  TSK-003 Especificacao de Requisitos                 01/01/2018-08:00 - 09/02/2018-18:00    18   30    0   40   ================
+  TSK-004 Comunicacao com o Robo                      12/02/2018-08:00 - 20/03/2018-15:20    16   27    0   37                    ===============
+  TSK-035 Atualizacao da Configuracao (Fluxos, Boxes  20/03/2018-15:20 - 16/04/2018-10:40    10   19    0   27                                   ===========
+  TSK-036 Atualizacao do Firmware do Robo             16/04/2018-10:40 - 10/05/2018-10:40    10   18    0   24                                              ==========
+* TSK-037 Disparo de WebHooks                         10/05/2018-10:40 -[05/06/2018-18:00]   10   19    0   27                                                       ===========|
+  TSK-040 Controle do Estado do Robo                  06/06/2018-08:00 - 11/07/2018-10:40    14   25    0   35                                                                  ===============
+  TSK-041 Suporte de Audio e Video                    11/07/2018-10:40 - 07/09/2018-08:00    25   42    0   58                                                                                ========================
+
+  TOTAIS                                              01/01/2018-08:00 - 07/09/2018-08:00   103  179    0  249   
+
+  Férias: 0 dias
+  Feriados: 0 dias
+    
+
+______________________________________________________________________________________________________________
+Pleno (4.0 dias por semana)
+   JIRA   Tarefa                                           Inicio      -     Termino       Requ Work Free Days
+
+  TSK-002 Infraestrutura Tecnologica                  01/01/2018-08:00 - 09/02/2018-18:00    24   30    0   40   ================
+  TSK-005 Inscricao de Usuario                        12/02/2018-08:00 - 15/02/2018-16:00     3    4    0    4                    ==
+  TSK-006 Recuperacao de Senha                        15/02/2018-16:00 - 21/02/2018-12:00     3    4    0    6                      ===
+  TSK-007 Autenticacao de Usuario                     21/02/2018-14:00 - 27/02/2018-10:00     3    4    0    6                        ===
+  TSK-018 Editor de Fluxos                            27/02/2018-10:00 - 05/04/2018-16:00    22   28    0   38                          ===============
+  TSK-019 Editor Grafico                              05/04/2018-16:00 - 31/07/2018-10:00    66   82    0  116                                         ===============================================
+  TSK-020 Persistencia de Fluxos                      31/07/2018-10:00 - 09/08/2018-16:00     6    8    0   10                                                                                        ====
+* TSK-024 Convite de Autorizacao                      09/08/2018-16:00 -[15/08/2018-12:00]    3    4    0    6                                                                                            ===|
+  TSK-038 Status do Robo                              15/08/2018-14:00 - 06/09/2018-16:00    13   16    0   22                                                                                              =========
+  TSK-039 Historico do Robo                           06/09/2018-16:00 - 03/10/2018-12:00    15   19    0   27                                                                                                       ===========
+
+  TOTAIS                                              01/01/2018-08:00 - 03/10/2018-12:00   158  198    0  276   
+
+  Férias: 0 dias
+  Feriados: 0 dias
+    
+
+______________________________________________________________________________________________________________
+Junior (4.0 dias por semana)
+   JIRA   Tarefa                                           Inicio      -     Termino       Requ Work Free Days
+
+  TSK-001 Infraestrutura Tecnologica                  01/01/2018-08:00 - 09/02/2018-18:00    24   30    0   40   ================
+  TSK-008 Cadastro de Usuarios                        12/02/2018-08:00 - 23/02/2018-18:00     8   10    0   12                    =====
+* TSK-009 Cadastro de Boxes de Fabrica                26/02/2018-08:00 -[09/03/2018-18:00]    8   10    0   12                          =====|
+  TSK-010 Cadastro de Firmware                        12/03/2018-08:00 - 23/03/2018-18:00     8   10    0   12                               =====
+  TSK-011 Cadastro de Hardware                        26/03/2018-08:00 - 06/04/2018-18:00     8   10    0   12                                     =====
+  TSK-012 Cadastro de Robos                           09/04/2018-08:00 - 20/04/2018-18:00     8   10    0   12                                           =====
+  TSK-013 Cadastro de Organizacoes                    23/04/2018-08:00 - 01/05/2018-10:00     5    6    0    8                                                ====
+  TSK-014 Cadastro de Usuarios de Organizacao         01/05/2018-10:00 - 09/05/2018-12:00     5    6    0    8                                                    ====
+  TSK-015 Cadastro de CustomBoxes                     09/05/2018-14:00 - 17/05/2018-16:00     5    6    0    8                                                       ====
+  TSK-016 Cadastro de Fluxos                          17/05/2018-16:00 - 25/05/2018-18:00     5    6    0    8                                                          ====
+  TSK-017 Cadastro de Fotos                           28/05/2018-08:00 - 05/06/2018-10:00     5    6    0    8                                                              ====
+  TSK-021 Perfil de Usuario                           05/06/2018-10:00 - 08/06/2018-18:00     3    4    0    4                                                                 ==
+  TSK-022 Gestao dos Meus Robos                       11/06/2018-08:00 - 13/06/2018-12:00     2    2    0    2                                                                    =
+  TSK-023 Autorizacao dos Meus Robos                  13/06/2018-14:00 - 21/06/2018-16:00     5    6    0    8                                                                     ====
+  TSK-025 Instalacao de Firmware em Robo              21/06/2018-16:00 - 27/06/2018-12:00     3    4    0    6                                                                        ===
+  TSK-026 Configuracao de Parametros                  27/06/2018-14:00 - 03/07/2018-10:00     3    4    0    6                                                                          ===
+  TSK-027 Configuracao de Personas                    03/07/2018-10:00 - 11/07/2018-12:00     5    6    0    8                                                                             ====
+  TSK-028 Configuracao de Gatilhos de Voz             11/07/2018-14:00 - 19/07/2018-16:00     5    6    0    8                                                                                ====
+  TSK-029 Configuracao de Gatilhos de Data            19/07/2018-16:00 - 27/07/2018-18:00     5    6    0    8                                                                                   ====
+  TSK-030 Configuracao de Gatilhos de Eventos         30/07/2018-08:00 - 07/08/2018-10:00     5    6    0    8                                                                                       ====
+  TSK-031 Gestao de Reconhecimento Facial             07/08/2018-10:00 - 15/08/2018-12:00     5    6    0    8                                                                                           ====
+  TSK-032 Gestao de WebHooks                          15/08/2018-14:00 - 23/08/2018-16:00     5    6    0    8                                                                                              ====
+  TSK-033 Configuracao de Gatilhos de WebHooks        23/08/2018-16:00 - 31/08/2018-18:00     5    6    0    8                                                                                                 ====
+* TSK-034 Testes do Editor de Fluxos                  03/09/2018-08:00 -[25/09/2018-10:00]   13   16    0   22                                                                                                     =========|
+
+  TOTAIS                                              01/01/2018-08:00 - 25/09/2018-10:00   153  191    0  267   
+
+  Férias: 0 dias
+  Feriados: 0 dias
+    
+

@@ -108,11 +108,11 @@ Screen{name="Recuperação de Senha", worker=Pleno}
 Screen{name="Autenticação de Usuário", worker=Pleno}
 
 -- # Administração DB1
-CRUD{name="Cadastro de Usuários", worker=Junior}
-CRUD{name="Cadastro de Boxes de Fábrica", worker=Junior, milestone=true}
-CRUD{name="Cadastro de Firmware", worker=Junior}
-CRUD{name="Cadastro de Hardware", worker=Junior}
-CRUD{name="Cadastro de Robôs", worker=Junior}
+Task{name="Cadastro de Usuários", worker=Junior, days=8}
+Task{name="Cadastro de Boxes de Fábrica", worker=Junior, milestone=true, days=8}
+Task{name="Cadastro de Firmware", worker=Junior, days=8}
+Task{name="Cadastro de Hardware", worker=Junior, days=8}
+Task{name="Cadastro de Robôs", worker=Junior, days=8}
 
 -- # Organizações
 CRUD{name="Cadastro de Organizações", worker=Junior}
