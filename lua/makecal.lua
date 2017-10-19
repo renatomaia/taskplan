@@ -106,7 +106,6 @@ local function div(number, divisor)
 end
 
 local function showtime(date)
-	do return tostring(date) end
 	local h,m
 	h = date.days%1
 	h, m = div(WorkHoursDaily*h, 1)
@@ -121,7 +120,7 @@ end
 
 local function timerange(start, finish)
 	if finish.days%1 == 0 then
-		finish = tostring(finish-1)--.."-18:00"
+		finish = tostring(finish-1).."-18:00"
 	else
 		finish = showtime(finish)
 	end
