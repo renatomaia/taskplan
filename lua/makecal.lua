@@ -11,15 +11,22 @@ local function calcfinish(calendar, start, required)
 	return finish
 end
 
-local WorkHoursDaily = 8
-local WorkDaysWeekly = 5
-local WorkDaysMonthly = 4*WorkDaysWeekly
+cfg = {
+	ShowGantGraph = false,
+	ShowDiacritics = false,
+}
+cfg.WorkHoursDaily = 8
+cfg.WorkDaysWeekly = 5
+cfg.WorkDaysMonthly = 4*cfg.WorkDaysWeekly
+cfg.WorkBeginTime = 8 -- at 8:00
+cfg.WorkFirstHours = cfg.WorkHoursDaily/2
+cfg.WorkBreakHours = 2 -- hours
 
 local function calcdays(task)
 	return task.days
-	    or(task.hours and task.hours/WorkHoursDaily)
-	    or(task.weeks and task.weeks*WorkDaysWeekly)
-	    or(task.months and task.months*WorkDaysMonthly)
+	    or(task.hours and task.hours/cfg.WorkHoursDaily)
+	    or(task.weeks and task.weeks*cfg.WorkDaysWeekly)
+	    or(task.months and task.months*cfg.WorkDaysMonthly)
 	    or task.effort
 end
 
@@ -73,8 +80,15 @@ function LoadEnv.Task(task)
 end
 
 local input = assert(loadfile((...), nil, LoadEnv))
-if _G._VERSION == "Lua 5.1" then setfenv(input, LoadEnv) end
 input(select(2, ...))
+
+for name, default in pairs(cfg) do
+	local value = LoadEnv[name]
+	if type(value) == type(default) then
+		cfg[name] = value
+	end
+end
+assert(cfg.WorkFirstHours <= cfg.WorkHoursDaily, "first work period is too long")
 
 local LetterEquivalence = {
 	a = {"á","à","â","ã"},
@@ -105,11 +119,11 @@ local function div(number, divisor)
 	return math.floor(number/divisor), number%divisor
 end
 
-local LunchBreakTime = 2 -- hours
-local FirstShiftTime = WorkHoursDaily/2
-local WorkBeginTime = 8 -- at 8:00
-local WorkBreakTime = WorkBeginTime+FirstShiftTime
-local WorkEndTime = WorkBeginTime+WorkHoursDaily+LunchBreakTime
+local WorkBreakTime = cfg.WorkBeginTime
+                    + cfg.WorkFirstHours
+local WorkEndTime = cfg.WorkBeginTime
+                  + cfg.WorkHoursDaily
+                  + cfg.WorkBreakHours
 local function showtime(date, finish)
 	local h = date.days%1
 	local m = 0
@@ -117,11 +131,11 @@ local function showtime(date, finish)
 		h = WorkEndTime
 		date = date-1 -- show as the end of previous day
 	else
-		h, m = div(WorkHoursDaily*h, 1)
-		h = h+WorkBeginTime
+		h, m = div(cfg.WorkHoursDaily*h, 1)
+		h = h+cfg.WorkBeginTime
 		m = div(60*m, 1)
 		if h > WorkBreakTime or (h == WorkBreakTime and (m > 0 or not finish)) then
-			h = h+LunchBreakTime
+			h = h+cfg.WorkBreakHours
 		end
 	end
 	return string.format("%s-%02d:%02d", tostring(date), h,m)
@@ -154,7 +168,7 @@ end
 
 for _, worker in ipairs(Workers) do
 	print(string.rep("_", ScreenWidth))
-	print(string.format("%s (%.1f dias por semana)", worker.name, worker.workrate*WorkDaysWeekly))
+	print(string.format("%s (%.1f dias por semana)", worker.name, worker.workrate*cfg.WorkDaysWeekly))
 	print("   JIRA   Tarefa                                      "
 	    .."     Inicio      -     Termino       Requ Work Free Days\n")
 	local calendar = worker.calendar
@@ -175,9 +189,11 @@ for _, worker in ipairs(Workers) do
 		                          calendar:workdays(start, finish),
 		                          calendar:freedays(start, finish),
 		                          duration))
-		io.write(string.rep(" ", math.ceil((start-begining)*widthfactor)),
-		         string.rep("=", math.ceil(duration*widthfactor)),
-		         milestone and "|" or "")
+		if cfg.ShowGantGraph then
+			io.write(string.rep(" ", math.ceil((start-begining)*widthfactor)),
+			         string.rep("=", math.ceil(duration*widthfactor)),
+			         milestone and "|" or "")
+		end
 		print()
 	end
 	local holidays = {}
