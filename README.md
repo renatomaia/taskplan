@@ -14,15 +14,15 @@ Tasks are specified in a ordinary Lua file, using the constructors described bel
 
 ### Dates
 
-{{{
+```lua
 local firstday = Date(28, 2, 2018) -- day, month, year
 local midterm = Date(1, 7, 2018) -- day, month, year
 local deadline = Date(31, 12, 2018) -- day, month, year
-}}}
+```
 
 ### Workers
 
-{{{
+```lua
 local worker1 = Worker{
 	name = "Worker Name",
 	start = firstday, -- worker's start moment
@@ -33,7 +33,7 @@ local worker1 = Worker{
 		{ start = deadline-15, finish = deadline }, -- 15 days before the end
 	}
 }
-}}}
+```
 
 ### Tasks
 
